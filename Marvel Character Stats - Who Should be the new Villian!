@@ -1,0 +1,144 @@
+/* Put your data in here and query it! */
+
+/* Marvel Heroes and Villains
+ Based on the website http://marvel.wikia.com/Main_Page
+ with popularity data from http://observationdeck.io9.com/something-i-found-marvel-character-popularity-poll-cb-1568108064 
+ and power grid data from http://marvel.wikia.com/Power_Grid#Power
+ Collected by: https://www.khanacademy.org/profile/Mentrasto/
+ */
+
+CREATE TABLE marvels (ID INTEGER PRIMARY KEY,
+    name TEXT,
+    popularity INTEGER,
+    alignment TEXT,
+    gender TEXT, 
+    height_m NUMERIC,
+    weight_kg NUMERIC,
+    hometown TEXT,
+    intelligence INTEGER,
+    strength INTEGER,
+    speed INTEGER,
+    durability INTEGER,
+    energy_Projection INTEGER,
+    fighting_Skills INTEGER);
+    
+INSERT INTO marvels VALUES(1, "Spider Man", 1, "Good", "Male", 1.78, 75.75, "USA", 4, 4, 3, 3, 1, 4); 
+INSERT INTO marvels VALUES(2, "Iron Man", 20, "Neutral", "Male", 1.98, 102.58, "USA", 6, 6, 5, 6, 6, 4); 
+INSERT INTO marvels VALUES(3, "Hulk", 18, "Neutral", "Male", 2.44, 635.29, "USA", 1, 7, 3, 7, 5, 4); 
+INSERT INTO marvels VALUES(4, "Wolverine", 3, "Good", "Male", 1.6, 88.46, "Canada", 2, 4, 2, 4, 1, 7);
+INSERT INTO marvels VALUES(5, "Thor", 5, "Good", "Male", 1.98, 290.3, "Asgard", 2, 7, 7, 6, 6, 4);
+INSERT INTO marvels VALUES(6, "Green Goblin", 91, "Bad", "Male", 1.93, 174.63, "USA", 4, 4, 3, 4, 3, 3);
+INSERT INTO marvels VALUES(7, "Magneto", 11, "Neutral", "Male", 1.88, 86.18, "Germany", 6, 3, 5, 4, 6, 4);
+INSERT INTO marvels VALUES(8, "Thanos", 47, "Bad", "Male", 2.01, 446.79, "Titan", 6, 7, 7, 6, 6, 4);
+INSERT INTO marvels VALUES(9, "Loki", 32, "Bad", "Male", 1.93, 238.14, "Jotunheim", 5, 5, 7, 6, 6, 3);
+INSERT INTO marvels VALUES(10, "Doctor Doom", 19, "Bad", "Male", 2.01, 188.24, "Latveria", 6, 4, 5, 6, 6, 4);
+INSERT INTO marvels VALUES(11, "Jean Grey", 8, "Good", "Female", 1.68, 52.16, "USA", 3, 2, 7, 7, 7, 4);
+INSERT INTO marvels VALUES(12, "Rogue", 4, "Good", "Female", 1.73, 54.43, "USA", 7, 7, 7, 7, 7, 7);
+INSERT INTO marvels VALUES(13, "Storm", 2, "Good", "Female", 1.80, 66, "Kenya", 2, 2, 3, 2, 5, 4);
+INSERT INTO marvels VALUES(14, "Nightcrawler", 6, "Good", "Male", 1.75, 73, "Germany", 3, 2, 7, 2, 1, 3);
+INSERT INTO marvels VALUES(15, "Gambit", 7, "Good", "Male", 1.88, 81, "EUA", 2, 2, 2, 2, 2, 4);
+INSERT INTO marvels VALUES(16, "Captain America", 9, "Good", "Male", 1.88, 108, "EUA", 3, 3, 2, 3, 1, 6);
+INSERT INTO marvels VALUES(17, "Cyclops", 10, "Good", "Male", 1.90, 88, "EUA", 3, 2, 2, 2, 5, 4);
+INSERT INTO marvels VALUES(18, "Emma Frost", 12, "Neutral", "Female", 1.78, 65, "EUA", 4, 4, 2, 5, 5, 3);
+INSERT INTO marvels VALUES(19, "Kitty Pryde", 13, "Good", "Female", 1.68, 50, "EUA", 4, 2, 2, 3, 1, 5);
+INSERT INTO marvels VALUES(20, "Daredevil", 14, "Good", "Male", 1.83, 91, "EUA", 3, 3, 2, 2, 4, 5);
+INSERT INTO marvels VALUES(21, "Punisher", 50, "Neutral", "Male", 1.85, 91, "EUA", 3, 3, 2, 2, 1, 6);
+INSERT INTO marvels VALUES(22, "Silver Surfer", 33, "Good", "Male", 1.93, 102, "Zenn-La", 3, 7, 7, 6, 7, 2);
+INSERT INTO marvels VALUES(23, "Ghost Rider", 86, "Good", "Male", 1.88, 99, "EUA", 2, 4, 3, 5, 4, 2);
+INSERT INTO marvels VALUES(24, "Venon", 78, "Neutral", "Male", 1.90, 118, "EUA", 3, 4, 2, 6, 1, 4);
+INSERT INTO marvels VALUES(25, "Juggernaut", 76, "Neutral", "Male", 2.87, 862, "EUA", 2, 7, 2, 7, 1, 4);
+INSERT INTO marvels VALUES(26, "Professor X", 58, "Good", "Male", 1.83, 86, "EUA", 5, 2, 2, 2, 5, 3);
+
+
+SELECT 
+    * 
+    FROM marvels;
+
+
+
+/* Neutral is on the table but I like the term anti-hero better!
+There has been situation where the characters labeled as neutral have stepped up to help save the the world. 
+They just also happen to do something that distrubs the status quo. */
+
+
+-- How many are the heroes, villians, and "anti-heroes" in the dataset?
+-- Change neutral to anti-hero in table
+UPDATE marvels
+    SET alignment = 'Anti-hero'
+    WHERE alignment = 'Neutral';
+
+--Get count of characters in each category
+SELECT
+    COUNT(name),
+    alignment
+    FROM marvels
+    GROUP BY alignment;
+    
+/* There are 4 villains, 15 heroes, and 7 anti-heroes*/
+
+
+
+--What are the average stats for each alignment?
+SELECT
+    alignment,
+    AVG(intelligence) as avg_intel,
+    AVG(strength) as avg_strength,
+    AVG(speed) as avg_speed,
+    AVG(durability) as avg_durability,
+    AVG(energy_Projection) as avg_energy_projection,
+    AVG(fighting_Skills) as avg_fighting_skill
+    FROM marvels
+    GROUP BY alignment
+    ORDER BY avg_intel DESC;
+      
+/* Villians have a higher average of intelligence, strength, speed, durability, and energy projection;
+  Heroes have the best stats for fighting skills, but that might be skewed considering they team up and jump emenies */
+  
+  
+    
+-- Grouping Characters by Intelligence and counting by by alignment
+SELECT
+    CASE
+        WHEN intelligence >= 6 THEN 'High IQ'
+        WHEN intelligence BETWEEN 3 AND 6 THEN 'Normal IQ'
+        ELSE 'Below Norm'
+    END as intel_group,
+    alignment,
+    COUNT(*)
+    FROM marvels
+    GROUP BY intel_group, alignment
+    ORDER BY intel_group;
+/* Despite there being more heroes than villians and anti-heroes combined, both groups have a higher proportion of their
+group with 'HIGH IQs (i.e., 2 anti-heroes, 2 villians, 1 hero)
+
+
+-- Who are the characters in the 'HIGH IQ' group?
+SELECT 
+    name,
+    alignment,
+    intelligence 
+    FROM marvels
+    ORDER BY intelligence DESC
+    LIMIT 5;
+/* Rogue is listed at the top of the list at 7. 
+Iron Man (listed as a anti-hero, which makes since given the age of Ultron) is tied w/ Magneto, Thanos, and Doctor Doom at 6.
+Stats need to be checked because All of these characters should rank higher than Rogue. */
+ 
+ 
+/* Narrow down the list further. Intelligence is important, but so is durability and strength. 
+You are great have to one or the other. 
+Using the query above, find the characters that meet the durability or strength standards*/
+SELECT 
+    *
+    FROM marvels
+    WHERE popularity < 25
+    AND (durability >=5 or strength >=5)
+    AND name IN (SELECT name
+                    FROM marvels
+                    ORDER BY intelligence DESC
+                    LIMIT 5); 
+ /*This query resulted in Iron Man , Doctor Doom, and Rogue. As mentioned eariler, the stats might be wrong for Rogue.
+ However it is what we have and they are both in the top 25 of popularity. I know the MCU has it phases already planned out,
+ but give the people what they want. Rogue vs Doctor Doom!lol. Okay, Just make Doctor Doom a universal/galatic threat!*/
+
+    
