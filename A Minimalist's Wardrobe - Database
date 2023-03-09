@@ -1,0 +1,137 @@
+-- Create a table that lists my most frequestly worn/used items in my closet
+CREATE TABLE wardrobe (id INTEGER, name TEXT, description TEXT, category TEXT, purpose TEXT, years_owned NUMERIC, location TEXT);
+
+
+--Insert the items into the table
+INSERT INTO wardrobe VALUES (1, 'Batman Chuck Taylor Converse', 'Low top: Black/multi-color', 'shoes', 'casual wear', 5, 'shoe rack');
+INSERT INTO wardrobe VALUES (20, 'Comme des Garcons Chuck Taylor Converse', 'Low top: grey/black', 'shoes', 'casual wear/causal dressy', 2, 'shoe rack');
+INSERT INTO wardrobe VALUES (10, 'Chuck 70 Vintage Canvas', 'Mid top: parchment/garnet/egret', 'shoes', 'casual wear/workout', 1, 'shoe rack');
+INSERT INTO wardrobe VALUES (5, 'Walk London loafers', 'platform, black, rounded-toe, square design on tongue of shoe', 'shoes', 'casual dressy/dressy', 1, 'in box');
+INSERT INTO wardrobe VALUES (2, 'fleece hoodie', 'fuzzy, black w/ front pockets', 'outerwear', 'casual wear', 3, 'hanging hook near door');
+INSERT INTO wardrobe VALUES (99, 'lightweight hoodie', 'thin, cotton, yellow, no pockets', 'outerwear', 'casual wear', 3, 'hanging hook near door');
+INSERT INTO wardrobe VALUES (13, 'Levi 550', 'relaxed fit, light blue denim', 'pants', 'casual wear', 2, 'closet');
+INSERT INTO wardrobe VALUES (9, 'Calvin Klein jean', 'fitted and tailored, black denim', 'pants', 'dressy casual', 2, 'closet');
+INSERT INTO wardrobe VALUES (55, 'ribbed shirt', 'short-sleeved, black, fitted', 'shirts', 'casual wear/dressy causal', 2, 'closet');
+INSERT INTO wardrobe VALUES (3, 't-shirt', 'plain, white, pocketed', 'shirts', 'casual wear', 5, 'bathroom drawer');
+INSERT INTO wardrobe VALUES (21, 'beanie', 'satin-lined, grey', 'outerwear', 'casual wear', 3, 'closet');
+INSERT INTO wardrobe VALUES (100, 'hair tie', 'thick, black', 'accessory', 'everyday', .5, 'bathroom drawer');
+INSERT INTO wardrobe VALUES (4, 'computer glasses', 'amber lens, black circle frames, blue-light protection', 'accessory', 'casual wear/casual dressy/dressy', 1, 'glasses case in backpack');
+INSERT INTO wardrobe VALUES (5, 'Cellular Apple Watch', 'black, knit band', 'accessory', 'workout/casual wear/causal dressy/dressy', 1, 'nightstand');
+INSERT INTO wardrobe VALUES (6, 'thin line ring', 'pinky ring (gold)', 'accessory', 'casual wear/causal dressy/dressy', 4, 'nightstand');
+INSERT INTO wardrobe VALUES (7, 'eagle ring', 'index ring (silver/gold)', 'accessory', 'casual wear/causal dressy/dressy', 4, 'nightstand');
+INSERT INTO wardrobe VALUES (8, '"wings" ring', 'pinky ring (silver)', 'accessory', 'casual wear/causal dressy/dressy', 4, 'nightstand');
+INSERT INTO wardrobe VALUES (11, '"sun/moon" ring', 'thumb ring (gold)', 'accessory', 'casual wear/casual dressy/dressy', 4, 'nightstand');
+INSERT INTO wardrobe VALUES (77, 'Gold Toe Socks', 'white, tube', 'socks', 'workout/casual wear', 1, 'dresser');
+INSERT INTO wardrobe VALUES (78, 'Hanes Socks', 'no show, multicolor', 'socks', 'casual wear/casual dressy', 4, 'dresser');
+
+-- View wardrobe table
+SELECT 
+	*
+    FROM wardrobe;
+    
+/* Table is text heavy! This needs to be more user friendly!
+Create a table that would replace some text with integers, start with categories */
+
+-- Create the category_lookup table with a primary key constraint
+CREATE TABLE category_lookup (
+  category_id INTEGER PRIMARY KEY,
+  category TEXT
+);
+
+-- Insert values into category_lookup table
+INSERT INTO category_lookup VALUES (1, 'accessory');
+INSERT INTO category_lookup VALUES (2, 'outerwear');
+INSERT INTO category_lookup VALUES (3, 'pants');
+INSERT INTO category_lookup VALUES (4, 'shirts');
+INSERT INTO category_lookup VALUES (5, 'shoes');
+INSERT INTO category_lookup VALUES (6, 'socks');
+
+-- View updated category_lookup table
+SELECT 
+	*
+    FROM category_lookup;
+
+
+
+/* Now that you have a table that categories for lookup, 
+      add a column to wardrobe table */
+
+
+
+-- Add a column to the table that gives the category a number 
+ALTER TABLE wardrobe ADD category_id INTEGER;
+
+-- View updated wardrobe table
+SELECT 
+	*
+    FROM wardrobe;
+    
+    
+    
+    
+/* category_id is NULL in wardrobe table;
+    make the tables connect. How are they related? */
+
+
+
+
+-- Add the foreign key constraint to the wardrobe table
+ALTER TABLE wardrobe ADD FOREIGN KEY (category_id) 
+	  REFERENCES category_lookup(category_id);
+
+-- Update the wardrobe table to use the category IDs
+UPDATE wardrobe 
+	  SET category_id = l.category_id
+	  FROM category_lookup l
+	  WHERE wardrobe.category = l.category;
+
+-- View updated wardrobe table
+SELECT 
+	*
+    FROM wardrobe;
+
+
+
+/* This shows all the information I am looking for!
+    Time to start analyses! */
+
+
+-- Select data from wardrobe table and order by years_owned and name
+SELECT 
+    name,
+    category,
+    category_id,
+    years_owned
+    FROM wardrobe
+    ORDER BY  years_owned DESC, name;
+
+-- How many items are frequently used in my wardrobe?
+SELECT
+	  COUNT(id)
+    FROM wardrobe;
+    
+-- What are the oldests item that I still frequently use?
+SELECT
+	  name, 
+    years_owned as oldest_items,
+    description
+    FROM wardrobe
+    WHERE years_owned = (SELECT MAX(years_owned) FROM wardrobe);
+    
+
+-- Find the avg number of years I've own items in your wardrobe by category
+SELECT 
+    category,
+    ROUND(AVG(years_owned),2) 
+    FROM wardrobe
+    GROUP BY category;
+
+-- Where are all my accessories located and how many are in each location
+SELECT 
+	DISTINCT(location), 
+    COUNT(id)
+    FROM wardrobe
+    WHERE category = 'accessory'
+    GROUP BY location;
+
+
