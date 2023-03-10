@@ -109,7 +109,7 @@ SELECT
     GROUP BY intel_group, alignment
     ORDER BY intel_group;
 /* Despite there being more heroes than villians and anti-heroes combined, both groups have a higher proportion of their
-group with 'HIGH IQs (i.e., 2 anti-heroes, 2 villians, 1 hero)
+group with 'HIGH IQs (i.e., 2 anti-heroes, 2 villians, 1 hero)*/
 
 
 -- Who are the characters in the 'HIGH IQ' group?
