@@ -213,4 +213,3 @@ SELECT
     WHERE category = 'accessory'
     GROUP BY location;
 
-
