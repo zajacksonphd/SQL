@@ -1,12 +1,19 @@
 -- Create a table that lists my most frequestly worn/used items in my closet
-CREATE TABLE wardrobe (id INTEGER, name TEXT, description TEXT, category TEXT, purpose TEXT, years_owned NUMERIC, location TEXT);
+CREATE TABLE wardrobe (
+	id INTEGER, 
+	name TEXT, 
+	description TEXT, 
+	category TEXT, 
+	purpose TEXT, 
+	years_owned NUMERIC, 
+	location TEXT);
 
 
 --Insert the items into the table
 INSERT INTO wardrobe VALUES (1, 'Batman Chuck Taylor Converse', 'Low top: Black/multi-color', 'shoes', 'casual wear', 5, 'shoe rack');
-INSERT INTO wardrobe VALUES (20, 'Comme des Garcons Chuck Taylor Converse', 'Low top: grey/black', 'shoes', 'casual wear/causal dressy', 2, 'shoe rack');
-INSERT INTO wardrobe VALUES (10, 'Chuck 70 Vintage Canvas', 'Mid top: parchment/garnet/egret', 'shoes', 'casual wear/workout', 1, 'shoe rack');
-INSERT INTO wardrobe VALUES (5, 'Walk London loafers', 'platform, black, rounded-toe, square design on tongue of shoe', 'shoes', 'casual dressy/dressy', 1, 'in box');
+INSERT INTO wardrobe VALUES (20, 'Comme des Garcons Chuck Taylor Converse', 'Low top: grey/black', 'shoes', 'multipurpose', 2, 'shoe rack');
+INSERT INTO wardrobe VALUES (10, 'Chuck 70 Vintage Canvas', 'Mid top: parchment/garnet/egret', 'shoes', 'multipurpose', 1, 'shoe rack');
+INSERT INTO wardrobe VALUES (5, 'Walk London loafers', 'platform, black, rounded-toe, square design on tongue of shoe', 'shoes', 'multipurpose', 1, 'in box');
 INSERT INTO wardrobe VALUES (2, 'fleece hoodie', 'fuzzy, black w/ front pockets', 'outerwear', 'casual wear', 3, 'hanging hook near door');
 INSERT INTO wardrobe VALUES (99, 'lightweight hoodie', 'thin, cotton, yellow, no pockets', 'outerwear', 'casual wear', 3, 'hanging hook near door');
 INSERT INTO wardrobe VALUES (13, 'Levi 550', 'relaxed fit, light blue denim', 'pants', 'casual wear', 2, 'closet');
@@ -15,14 +22,14 @@ INSERT INTO wardrobe VALUES (55, 'ribbed shirt', 'short-sleeved, black, fitted',
 INSERT INTO wardrobe VALUES (3, 't-shirt', 'plain, white, pocketed', 'shirts', 'casual wear', 5, 'bathroom drawer');
 INSERT INTO wardrobe VALUES (21, 'beanie', 'satin-lined, grey', 'outerwear', 'casual wear', 3, 'closet');
 INSERT INTO wardrobe VALUES (100, 'hair tie', 'thick, black', 'accessory', 'everyday', .5, 'bathroom drawer');
-INSERT INTO wardrobe VALUES (4, 'computer glasses', 'amber lens, black circle frames, blue-light protection', 'accessory', 'casual wear/casual dressy/dressy', 1, 'glasses case in backpack');
-INSERT INTO wardrobe VALUES (5, 'Cellular Apple Watch', 'black, knit band', 'accessory', 'workout/casual wear/causal dressy/dressy', 1, 'nightstand');
-INSERT INTO wardrobe VALUES (6, 'thin line ring', 'pinky ring (gold)', 'accessory', 'casual wear/causal dressy/dressy', 4, 'nightstand');
-INSERT INTO wardrobe VALUES (7, 'eagle ring', 'index ring (silver/gold)', 'accessory', 'casual wear/causal dressy/dressy', 4, 'nightstand');
-INSERT INTO wardrobe VALUES (8, '"wings" ring', 'pinky ring (silver)', 'accessory', 'casual wear/causal dressy/dressy', 4, 'nightstand');
-INSERT INTO wardrobe VALUES (11, '"sun/moon" ring', 'thumb ring (gold)', 'accessory', 'casual wear/casual dressy/dressy', 4, 'nightstand');
-INSERT INTO wardrobe VALUES (77, 'Gold Toe Socks', 'white, tube', 'socks', 'workout/casual wear', 1, 'dresser');
-INSERT INTO wardrobe VALUES (78, 'Hanes Socks', 'no show, multicolor', 'socks', 'casual wear/casual dressy', 4, 'dresser');
+INSERT INTO wardrobe VALUES (4, 'computer glasses', 'amber lens, black circle frames, blue-light protection', 'accessory', 'multipurpose', 1, 'glasses case in backpack');
+INSERT INTO wardrobe VALUES (5, 'Cellular Apple Watch', 'black, knit band', 'accessory', 'multipurpose', 1, 'nightstand');
+INSERT INTO wardrobe VALUES (6, 'thin line ring', 'pinky ring (gold)', 'accessory', 'multipurpose', 4, 'nightstand');
+INSERT INTO wardrobe VALUES (7, 'eagle ring', 'index ring (silver/gold)', 'accessory', 'multipurpose', 4, 'nightstand');
+INSERT INTO wardrobe VALUES (8, '"wings" ring', 'pinky ring (silver)', 'accessory', 'multipurpose', 4, 'nightstand');
+INSERT INTO wardrobe VALUES (11, '"sun/moon" ring', 'thumb ring (gold)', 'accessory', 'multipurpose', 4, 'nightstand');
+INSERT INTO wardrobe VALUES (77, 'Gold Toe Socks', 'white, tube', 'socks', 'multipurpose', 1, 'dresser');
+INSERT INTO wardrobe VALUES (78, 'Hanes Socks', 'no show, multicolor', 'socks', 'multipurpose', 4, 'dresser');
 
 -- View wardrobe table
 SELECT 
@@ -34,9 +41,8 @@ Create a table that would replace some text with integers, start with categories
 
 -- Create the category_lookup table with a primary key constraint
 CREATE TABLE category_lookup (
-  category_id INTEGER PRIMARY KEY,
-  category TEXT
-);
+	category_id INTEGER PRIMARY KEY,
+	category TEXT);
 
 -- Insert values into category_lookup table
 INSERT INTO category_lookup VALUES (1, 'accessory');
@@ -49,12 +55,12 @@ INSERT INTO category_lookup VALUES (6, 'socks');
 -- View updated category_lookup table
 SELECT 
 	*
-    FROM category_lookup;
+    	FROM category_lookup;
 
 
 
 /* Now that you have a table that categories for lookup, 
-      add a column to wardrobe table */
+     add a column to wardrobe table */
 
 
 
@@ -64,31 +70,104 @@ ALTER TABLE wardrobe ADD category_id INTEGER;
 -- View updated wardrobe table
 SELECT 
 	*
-    FROM wardrobe;
-    
-    
-    
-    
-/* category_id is NULL in wardrobe table;
-    make the tables connect. How are they related? */
-
+	FROM wardrobe;
 
 
 
 -- Add the foreign key constraint to the wardrobe table
 ALTER TABLE wardrobe ADD FOREIGN KEY (category_id) 
-	  REFERENCES category_lookup(category_id);
+	REFERENCES category_lookup(category_id);
 
 -- Update the wardrobe table to use the category IDs
 UPDATE wardrobe 
-	  SET category_id = l.category_id
-	  FROM category_lookup l
-	  WHERE wardrobe.category = l.category;
+	SET category_id = l.category_id
+	FROM category_lookup l
+	WHERE wardrobe.category = l.category;
 
--- View updated wardrobe table
-SELECT 
+-- View the updated wardrobe table with category IDs
+SELECT
 	*
-    FROM wardrobe;
+FROM wardrobe;
+
+/* This looks much better! We can also update the purpose of each item by creating another lookup table. */
+
+-- Create the purpose_lookup table with a primary key constraint
+CREATE TABLE purpose_lookup (
+	purpose_id INTEGER PRIMARY KEY,
+	purpose TEXT);
+
+-- Insert values into purpose_lookup table
+INSERT INTO purpose_lookup VALUES (1, 'accessory');
+INSERT INTO purpose_lookup VALUES (2, 'casual wear');
+INSERT INTO purpose_lookup VALUES (3, 'casual dressy');
+INSERT INTO purpose_lookup VALUES (4, 'dressy casual');
+INSERT INTO purpose_lookup VALUES (5, 'dressy');
+INSERT INTO purpose_lookup VALUES (6, 'workout');
+INSERT INTO purpose_lookup VALUES (7, 'everyday');
+
+-- View the purpose_lookup table
+SELECT
+	*
+	FROM purpose_lookup;
+
+-- Add a column to the table that gives the purpose a number
+ALTER TABLE wardrobe ADD purpose_id INTEGER;
+
+-- Add the foreign key constraint to the wardrobe table
+ALTER TABLE wardrobe ADD FOREIGN KEY (purpose_id)
+REFERENCES purpose_lookup(purpose_id);
+
+-- Update the wardrobe table to use the purpose IDs
+UPDATE wardrobe
+SET purpose_id = p.purpose_id
+FROM purpose_lookup p
+WHERE wardrobe.purpose = p.purpose;
+
+-- View the updated wardrobe table with purpose IDs
+SELECT
+	*
+	FROM wardrobe;
+
+/* We can also update the location of each item by creating another lookup table. */
+
+-- Create the location_lookup table with a primary key constraint
+CREATE TABLE location_lookup (
+	location_id INTEGER PRIMARY KEY,
+	location TEXT);
+
+-- Insert values into location_lookup table
+INSERT INTO location_lookup VALUES (1, 'accessory');
+INSERT INTO location_lookup VALUES (2, 'bathroom drawer');
+INSERT INTO location_lookup VALUES (3, 'closet');
+INSERT INTO location_lookup VALUES (4, 'dresser');
+INSERT INTO location_lookup VALUES (5, 'glasses case in backpack');
+INSERT INTO location_lookup VALUES (6, 'hanging hook near door');
+INSERT INTO location_lookup VALUES (7, 'in box');
+INSERT INTO location_lookup VALUES (8, 'nightstand');
+INSERT INTO location_lookup VALUES (9, 'shoe rack');
+
+-- View the location_lookup table
+SELECT
+	*
+	FROM location_lookup;
+
+-- Add a column to the table that gives the location a number
+	ALTER TABLE wardrobe ADD location_id INTEGER;
+
+-- Add the foreign key constraint to the wardrobe table
+ALTER TABLE wardrobe ADD FOREIGN KEY (location_id)
+	REFERENCES location_lookup(location_id);
+
+-- Update the wardrobe table to use the location IDs
+UPDATE wardrobe
+	SET location_id = l.location_id
+	FROM location_lookup l
+	WHERE wardrobe.location = l.location;
+
+-- View the updated wardrobe table with location IDs
+SELECT
+	*
+	FROM wardrobe;
 
 
 
@@ -107,12 +186,12 @@ SELECT
 
 -- How many items are frequently used in my wardrobe?
 SELECT
-	  COUNT(id)
+	COUNT(id)
     FROM wardrobe;
     
 -- What are the oldests item that I still frequently use?
 SELECT
-	  name, 
+	name, 
     years_owned as oldest_items,
     description
     FROM wardrobe
