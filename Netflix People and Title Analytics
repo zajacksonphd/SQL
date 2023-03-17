@@ -56,4 +56,19 @@ SELECT
     LIMIT 1;
     
     -- The oldest movie in the database is 'Prelude to War' released in 1942!
+    
+/* This syntax could have multiple movies that came out in 1942; 
+    Rerun query to be sure that all movies are pulled */
 
+
+-- CORRECTED QUERY
+
+SELECT
+    title, 
+    release_year
+    FROM "CharlotteChaze/BreakIntoTech"."netflix_titles_info"
+    WHERE release_year = (SELECT MIN(release_year) 
+        FROM "CharlotteChaze/BreakIntoTech"."netflix_titles_info"
+        WHERE type = 'Movie');
+        
+     -- In the database two movies came out in 1942 - 'Prelude to War' and 'The Battle of Midway'!
