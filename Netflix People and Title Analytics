@@ -5,22 +5,36 @@ Here I'm querying a database that's holding Nexflix data to answer questions abo
 */
 
 -- 1) How many movie titles are there in the database? (movies only, not tv shows)
+
 SELECT
     COUNT(*)
     FROM "CharlotteChaze/BreakIntoTech"."netflix_titles_info"
     WHERE type = 'Movie';
+    
+    -- There are movie titles in the database. 
+
 
 -- 2) When was the most recent batch of tv shows and/or movies added to the database?
+
 SELECT
     MAX(date_added)
     FROM "CharlotteChaze/BreakIntoTech"."netflix_titles_info";
     
+    -- The lastest batch of tv shows and/or movies were added on 2021-09-25 00:00:00
+    
+    
 -- 3) List all the movies and tv shows in alphabetical order.
+
 SELECT
     title
     FROM "CharlotteChaze/BreakIntoTech"."netflix_titles_info"
     ORDER BY title ASC;
+    
+    -- Too many rows. Go to databases and run query to see output!
+    
+    
 -- 4) Who was the Director for the movie Bright Star?
+
 SELECT
     director
     FROM "CharlotteChaze/BreakIntoTech"."netflix_people" np
@@ -28,10 +42,18 @@ SELECT
         ON np.show_id = nti.show_id
     WHERE title = 'Bright Star'
         AND type = 'Movie';
+        
+    -- The director of the movie Bright Star was Jane Campion
+        
+        
 -- 5) What is the oldest movie in the database and what year was it made?
+
 SELECT
     title, release_year
     FROM "CharlotteChaze/BreakIntoTech"."netflix_titles_info"
     WHERE type = 'Movie'
     ORDER BY release_year ASC
     LIMIT 1;
+    
+    -- The oldest movie in the database is 'Prelude to War' released in 1942!
+
