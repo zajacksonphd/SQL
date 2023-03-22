@@ -133,3 +133,14 @@ SELECT
     
 
     --There were 13,005 customers who order more than two products at a time in February and they spent an average of $190.
+
+-- 8) List all the products sold in Los Angeles in February, and include how many of each were sold. Order by most sold to least
+SELECT 
+    feb.product,
+    SUM(feb.Quantity) as total_quant_ordered
+    FROM FebSales feb
+        WHERE length(orderid) = 6
+        AND orderid <> 'Order ID'
+        AND location like '%Los Angeles%'
+    GROUP BY feb.product
+    ORDER BY total_quant_ordered DESC;
