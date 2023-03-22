@@ -127,12 +127,12 @@ SELECT
     FROM customers
     JOIN FebSales feb
         ON customers.order_id = feb.orderID
-        WHERE length(customers.order_id) = 6
+    WHERE length(customers.order_id) = 6
         AND customers.order_id <> 'Order ID'
-    HAVING COUNT(feb.Products) > 2;
+        AND feb.Quantity > 2;
     
 
-    --There were 13,005 customers who order more than two products at a time in February and they spent an average of $190.
+    --There were 278 customers who order more than two products at a time in February and they spent an average of $13.83.
 
 -- 8) List all the products sold in Los Angeles in February, and include how many of each were sold. Order by most sold to least
 SELECT 
@@ -144,3 +144,72 @@ SELECT
         AND location like '%Los Angeles%'
     GROUP BY feb.product
     ORDER BY total_quant_ordered DESC;
+    
+    
+                    /* Advanced Customer & Order Analytic Questions*/
+
+-- 1) Which locations in New York received at least 3 orders in January, and how many orders did they each receive? (Hint: use HAVING).
+SELECT 
+    jan.location,
+    COUNT(jan.orderID) as num_of_orders
+    FROM JanSales jan
+    WHERE length(orderid) = 6
+        AND orderid <> 'Order ID'
+        AND location like '%New York%'
+    GROUP BY jan.location
+    HAVING num_of_orders >= 3;
+
+    -- In January, there 4 locations in New York that had 3 or more orders
+    -- Elm St had 3 orders; Lincoln St had 3; Pine St had 3; Jefferson St. had 4. 
+
+
+-- 2) How many of each type of headphone were sold in February?
+SELECT 
+    feb.product,
+    COUNT(feb.Quantity) as total_count_sold
+    FROM FebSales feb
+        WHERE length(orderid) = 6
+        AND orderid <> 'Order ID'
+        AND feb.product like '%headphone%'
+    GROUP BY feb.product
+    ORDER BY total_count_sold DESC;
+
+
+    -- In February, 1186 wired headphones were sold, 1011 Apple Heaphones, and 834 Bose SoundSport Headphones.
+    
+
+-- 3) What was the average amount spent per account in February? (Hints: For this question, we want the average amount spent / number of accounts, not the amount spent by each account. To multiply, you can use the * symbol, and to divide, you can use the / symbol.)
+SELECT 
+    ROUND(SUM((feb.Quantity)*feb.price)/COUNT(customers.acctnum),2) as avg_spent_per_account
+    FROM customers
+    JOIN FebSales feb
+        ON customers.order_id = feb.orderID
+        WHERE length(customers.order_id) = 6
+        AND customers.order_id <> 'Order ID';
+
+    -- The average amount spent per account in February was $190.
+        
+
+-- 4) What was the average quantity of products purchased per account in February? (Hint: just like question 3, we want the overall average, not the average for each account individually).
+SELECT 
+    (SUM(feb.Quantity)/COUNT(customers.acctnum)) as avg_quant
+    FROM customers
+    JOIN FebSales feb
+        ON customers.order_id = feb.orderID
+        WHERE length(customers.order_id) = 6
+        AND customers.order_id <> 'Order ID';
+        
+    --The average quantity of products ordered was 1.
+
+-- 5) Which product brought in the most revenue in January and how much revenue did it bring in total?
+SELECT 
+    jan.product,
+    ROUND(SUM((jan.Quantity)*jan.price),2) as total_jan_revenue
+    FROM BIT_DB.JanSales jan
+    WHERE length(orderid) = 6
+        AND orderid <> 'Order ID'
+    GROUP BY jan.product
+    ORDER BY total_jan_revenue DESC
+    LIMIT 1;
+
+    --The Macbook Pro Laptop brought in the most revenue in January at $399,500. 
