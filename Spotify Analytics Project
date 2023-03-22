@@ -130,3 +130,38 @@ SELECT
 Olivia Rodrigo songs average are more popular than Doja Cat. 
 However Doja Cat's songs have more energy, are louder, and have a more positive feeling
 So I am more likely to listen to her that Olivia     */
+
+/* Calculate the average popularity for the artists in the Spotify data table. 
+Then, for every artist with an average popularity of 90 or above, show their name, their average popularity, and label them as a “Top Star”. */
+
+
+WITH topstar AS (
+  SELECT
+      artist_name, 
+      CASE WHEN AVG(popularity) >= 90 THEN 'Top Star'
+      END as label
+      FROM Spotifydata
+      GROUP BY artist_name
+)
+SELECT
+    spot.artist_name,
+    AVG(spot.popularity) as avg_popularity,
+    topstar.label
+    FROM topstar
+    JOIN Spotifydata spot
+        ON spot.artist_name = topstar.artist_name
+    WHERE topstar.label = 'Top Star'
+    GROUP BY spot.artist_name;
+    
+    /* The answer to the last query
+    
+    Doja Cat	90.75	Top Star
+    Ed Sheeran	95	Top Star
+    Glass Animals	94	Top Star
+    Harry Styles	90	Top Star
+    Justin Bieber	90	Top Star
+    Lil Nas X	90	Top Star
+    Måneskin	90.5	Top Star
+    Olivia Rodrigo	92.25	Top Star
+    The Neighbourhood	92	Top Star
+    The Weeknd	91.5	Top Star */
