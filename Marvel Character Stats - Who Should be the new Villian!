@@ -107,44 +107,50 @@ ALTER TABLE marvels
 
 
 UPDATE marvels
-JOIN powergrid ON marvels.durability = powergrid.attribute_level
-SET marvels.durability_level = powergrid.durability_level;
+SET durability_level = (SELECT durability_level 
+			FROM powergrid 
+			WHERE attribute_level = marvels.durability);
 
 UPDATE marvels
-JOIN powergrid ON marvels.intelligence = powergrid.attribute_level
-SET marvels.intelligence_level = powergrid.intelligence_level;
+SET intelligence_level = (SELECT intelligence_level 
+			FROM powergrid 
+			WHERE attribute_level = marvels.intelligence);
 
 UPDATE marvels
-JOIN powergrid ON marvels.strength = powergrid.attribute_level
-SET marvels.strength_level = powergrid.strength_level;
+SET strength_level = (SELECT strength_level 
+                      	FROM powergrid 
+                       	WHERE attribute_level = marvels.strength);
 
 UPDATE marvels
-JOIN powergrid ON marvels.strength = powergrid.attribute_level
-SET marvels.strength_desc = powergrid.strength_desc;
+SET strength_desc = (SELECT strength_desc 
+                      	FROM powergrid 
+                       	WHERE attribute_level = marvels.strength);
 
 UPDATE marvels
-JOIN powergrid ON marvels.speed = powergrid.attribute_level
-SET marvels.speed_level = powergrid.speed_level;
+SET speed_level = (SELECT speed_level 
+                      	FROM powergrid 
+                       	WHERE attribute_level = marvels.speed);
 
 UPDATE marvels
-JOIN powergrid ON marvels.speed = powergrid.attribute_level
-SET marvels.speed_desc = powergrid.speed_desc;
+SET speed_desc = (SELECT speed_desc 
+                      	FROM powergrid 
+                       	WHERE attribute_level = marvels.speed);
 
 UPDATE marvels
-JOIN powergrid ON marvels.energy_Projection = powergrid.attribute_level
-SET marvels.energy_proj_level = powergrid.energy_proj_level;
+SET energy_proj_level	 = (SELECT energy_proj_level	
+                      	FROM powergrid 
+                       	WHERE attribute_level = marvels.energy_Projection);
 
 UPDATE marvels
-JOIN powergrid ON marvels.energy_Projection = powergrid.attribute_level
-SET marvels.energy_proj_desc = powergrid.energy_proj_desc;
+SET energy_proj_desc = (SELECT energy_proj_desc 
+                      	FROM powergrid 
+                       	WHERE attribute_level = marvels.energy_Projection);
 
 UPDATE marvels
-JOIN powergrid ON marvels.fighting_Skills = powergrid.attribute_level
-SET marvels.fighting_level = powergrid.fighting_level;
+SET fighting_level = (SELECT fighting_level 
+                      	FROM powergrid 
+                       	WHERE attribute_level = marvels.fighting_Skills);
 
-
-
-    
 
 
 --Get count of characters in each category
