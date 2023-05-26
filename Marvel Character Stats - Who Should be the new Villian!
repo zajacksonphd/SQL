@@ -185,9 +185,9 @@ SELECT
 -- Grouping Characters by Intelligence and counting by by alignment
 SELECT
     CASE
-        WHEN intelligence >= 6 THEN 'High IQ'
-        WHEN intelligence BETWEEN 3 AND 6 THEN 'Normal IQ'
-        ELSE 'Below Norm'
+        WHEN intelligence >= 5 THEN 'Genius+ IQ'
+        WHEN intelligence BETWEEN 3 AND 5 THEN 'Above Normal IQ'
+        ELSE 'Normal IQ'
     END as intel_group,
     alignment,
     COUNT(*)
@@ -195,17 +195,17 @@ SELECT
     GROUP BY intel_group, alignment
     ORDER BY intel_group;
 /* Despite there being more heroes than villians and anti-heroes combined, both groups have a higher proportion of their
-group with 'HIGH IQs (i.e., 2 anti-heroes, 2 villians, 1 hero)*/
+group with 'Genius+ IQs (i.e., 2 anti-heroes, 3 villians, 2 heroes)*/
 
 
--- Who are the characters in the 'HIGH IQ' group?
+-- Who are the characters in the 'Genius+ IQ' group?
 SELECT 
-    name,
     alignment,
-    intelligence 
+    name,
+    intelligence_level,
+    ROW_NUMBER() OVER (PARTITION BY alignment ORDER BY intelligence DESC) AS rn
     FROM marvels
-    ORDER BY intelligence DESC
-    LIMIT 5;
+    WHERE intelligence >= 5;
 /* Rogue is listed at the top of the list at 7. 
 Iron Man (listed as a anti-hero, which makes since given the age of Ultron) is tied w/ Magneto, Thanos, and Doctor Doom at 6.
 Stats need to be checked because All of these characters should rank higher than Rogue. */
@@ -214,15 +214,24 @@ Stats need to be checked because All of these characters should rank higher than
 /* Narrow down the list further. Intelligence is important, but so is durability and strength. 
 You are great have to one or the other. 
 Using the query above, find the characters that meet the durability or strength standards*/
-SELECT 
-    *
+
+WITH genius_iq_characters AS (
+    SELECT 
+        alignment,
+        name,
+        intelligence AS intelligence_level,
+        ROW_NUMBER() OVER (PARTITION BY alignment ORDER BY intelligence DESC) AS rn
     FROM marvels
-    WHERE popularity < 25
-    AND (durability >=5 or strength >=5)
-    AND name IN (SELECT name
-                    FROM marvels
-                    ORDER BY intelligence DESC
-                    LIMIT 5); 
+    WHERE intelligence >= 5
+)
+
+SELECT *
+FROM marvels
+WHERE popularity < 25
+    AND (durability >= 5 OR strength >= 5)
+    AND name IN (
+        SELECT name FROM genius_iq_characters
+    );
  /*This query resulted in Iron Man , Doctor Doom, and Rogue. As mentioned eariler, the stats might be wrong for Rogue.
  However it is what we have and they are both in the top 25 of popularity. I know the MCU has it phases already planned out,
  but give the people what they want. Rogue vs Doctor Doom!lol. Okay, Just make Doctor Doom a universal/galatic threat!*/
