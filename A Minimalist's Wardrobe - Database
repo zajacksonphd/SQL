@@ -197,6 +197,10 @@ SELECT
     FROM wardrobe
     WHERE years_owned = (SELECT MAX(years_owned) FROM wardrobe);
     
+-- Find the avg number of years I've own items in your wardrobe by category
+SELECT 
+    ROUND(AVG(years_owned),2) as avg_years_owned
+    FROM wardrobe;
 
 -- Find the avg number of years I've own items in your wardrobe by category
 SELECT 
@@ -213,3 +217,13 @@ SELECT
     WHERE category = 'accessory'
     GROUP BY location;
 
+
+-- What items have I owned for 3 years or more?
+SELECT
+	category,
+    name, 
+    description,
+    years_owned
+    FROM wardrobe
+    WHERE years_owned >= 3
+    ORDER BY 4 DESC;
