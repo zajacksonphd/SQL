@@ -70,7 +70,7 @@ ALTER TABLE wardrobe ADD category_id INTEGER;
 -- View updated wardrobe table
 SELECT 
 	*
-	FROM wardrobe;
+FROM wardrobe;
 
 
 
@@ -108,7 +108,7 @@ INSERT INTO purpose_lookup VALUES (7, 'everyday');
 -- View the purpose_lookup table
 SELECT
 	*
-	FROM purpose_lookup;
+FROM purpose_lookup;
 
 -- Add a column to the table that gives the purpose a number
 ALTER TABLE wardrobe ADD purpose_id INTEGER;
@@ -126,7 +126,7 @@ WHERE wardrobe.purpose = p.purpose;
 -- View the updated wardrobe table with purpose IDs
 SELECT
 	*
-	FROM wardrobe;
+FROM wardrobe;
 
 /* We can also update the location of each item by creating another lookup table. */
 
@@ -149,7 +149,7 @@ INSERT INTO location_lookup VALUES (9, 'shoe rack');
 -- View the location_lookup table
 SELECT
 	*
-	FROM location_lookup;
+FROM location_lookup;
 
 -- Add a column to the table that gives the location a number
 	ALTER TABLE wardrobe ADD location_id INTEGER;
@@ -167,7 +167,7 @@ UPDATE wardrobe
 -- View the updated wardrobe table with location IDs
 SELECT
 	*
-	FROM wardrobe;
+FROM wardrobe;
 
 
 
@@ -176,40 +176,73 @@ SELECT
 
 
 -- Select data from wardrobe table and order by years_owned and name
+
+
 SELECT 
     name,
     category,
     category_id,
     years_owned
-    FROM wardrobe
-    ORDER BY  years_owned DESC, name;
+    
+FROM wardrobe
+    
+ORDER BY  4, 1;
+
+
+
 
 -- How many items are frequently used in my wardrobe?
+
 SELECT
 	COUNT(id)
-    FROM wardrobe;
+	
+FROM wardrobe;
     
+	
+	
 -- What are the oldests item that I still frequently use?
+
 SELECT
 	name, 
     years_owned as oldest_items,
     description
-    FROM wardrobe
-    WHERE years_owned = (SELECT MAX(years_owned) FROM wardrobe);
+	
+FROM wardrobe
+
+WHERE years_owned = (SELECT MAX(years_owned) FROM wardrobe);
     
--- Find the avg number of years I've own items in your wardrobe by category
+
+
+
+-- Find the avg number of years I've own items in your wardrobe by category.
+
+
 SELECT 
     ROUND(AVG(years_owned),2) as avg_years_owned
-    FROM wardrobe;
+	
+FROM wardrobe;
 
--- Find the avg number of years I've own items in your wardrobe by category
+
+
+
+-- Find the avg number of years I've own items in your wardrobe by category.
+
+
 SELECT 
     category,
     ROUND(AVG(years_owned),2) 
-    FROM wardrobe
-    GROUP BY category;
+	
+FROM wardrobe
 
--- Where are all my accessories located and how many are in each location
+GROUP BY 1;
+
+
+
+
+-- Where are all my accessories located and how many are in each location?
+
+
+
 SELECT 
 	DISTINCT(location), 
     COUNT(id)
@@ -224,6 +257,9 @@ SELECT
     name, 
     description,
     years_owned
-    FROM wardrobe
-    WHERE years_owned >= 3
-    ORDER BY 4 DESC;
+
+FROM wardrobe
+    
+WHERE years_owned >= 3
+    
+ORDER BY 4 DESC;
