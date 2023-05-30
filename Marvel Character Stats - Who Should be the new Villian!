@@ -155,10 +155,12 @@ SET fighting_level = (SELECT fighting_level
 
 --Get count of characters in each category
 SELECT
-    COUNT(name),
-    alignment
-    FROM marvels
-    GROUP BY alignment;
+    alignment,
+	COUNT(name)
+   
+FROM marvels
+
+GROUP BY 1;
     
 /* There are 4 villains, 15 heroes, and 7 anti-heroes*/
 
@@ -173,9 +175,13 @@ SELECT
     AVG(durability) as avg_durability,
     AVG(energy_Projection) as avg_energy_projection,
     AVG(fighting_Skills) as avg_fighting_skill
-    FROM marvels
-    GROUP BY alignment
-    ORDER BY avg_intel DESC;
+    
+ FROM	marvels
+ 
+ GROUP BY 1
+ 
+ ORDER 
+ 	BY 2 DESC;
       
 /* Villians have a higher average of intelligence, strength, speed, durability, and energy projection;
   Heroes have the best stats for fighting skills, but that might be skewed considering they team up and jump emenies */
@@ -191,9 +197,12 @@ SELECT
     END as intel_group,
     alignment,
     COUNT(*)
+	
     FROM marvels
-    GROUP BY intel_group, alignment
-    ORDER BY intel_group;
+		
+    GROUP BY 1, 2
+	
+    ORDER BY 1;
 /* Despite there being more heroes than villians and anti-heroes combined, both groups have a higher proportion of their
 group with 'Genius+ IQs (i.e., 2 anti-heroes, 3 villians, 2 heroes)*/
 
@@ -204,34 +213,48 @@ SELECT
     name,
     intelligence_level,
     ROW_NUMBER() OVER (PARTITION BY alignment ORDER BY intelligence DESC) AS rn
-    FROM marvels
-    WHERE intelligence >= 5;
+	
+FROM marvels
+
+WHERE intelligence >= 5;
+
 /* Rogue is listed at the top of the list at 7. 
 Iron Man (listed as a anti-hero, which makes since given the age of Ultron) is tied w/ Magneto, Thanos, and Doctor Doom at 6.
 Stats need to be checked because All of these characters should rank higher than Rogue. */
  
  
 /* Narrow down the list further. Intelligence is important, but so is durability and strength. 
-You are great have to one or the other. 
-Using the query above, find the characters that meet the durability or strength standards*/
+You are great have to one or the other. */
 
 WITH genius_iq_characters AS (
+
     SELECT 
-        alignment,
         name,
+		alignment
         intelligence AS intelligence_level,
         ROW_NUMBER() OVER (PARTITION BY alignment ORDER BY intelligence DESC) AS rn
-    FROM marvels
-    WHERE intelligence >= 5
+    
+	FROM marvels
+    
+	WHERE intelligence >=5
 )
 
-SELECT *
-FROM marvels
-WHERE popularity < 25
-    AND (durability >= 5 OR strength >= 5)
-    AND name IN (
-        SELECT name FROM genius_iq_characters
-    );
+SELECT 
+	g.name,
+	m.intelligence_level,
+	m.intelligence_desc,
+	m.strength_level,
+	m.strength_desc,
+	m.speed_level,
+	m.speed_desc
+
+FROM genius_iq_characters g
+
+LEFT JOIN marvel m
+	ON g.name = m.name
+	AND g.rn = 1;
+	
+	
  /*This query resulted in Iron Man , Doctor Doom, and Rogue. As mentioned eariler, the stats might be wrong for Rogue.
  However it is what we have and they are both in the top 25 of popularity. I know the MCU has it phases already planned out,
  but give the people what they want. Rogue vs Doctor Doom!lol. Okay, Just make Doctor Doom a universal/galatic threat!*/
