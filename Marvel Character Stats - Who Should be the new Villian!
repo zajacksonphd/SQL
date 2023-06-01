@@ -223,37 +223,6 @@ Iron Man (listed as a anti-hero, which makes since given the age of Ultron) is t
 Stats need to be checked because All of these characters should rank higher than Rogue. */
  
  
-/* Practice CTE */
-
-WITH genius_iq_characters AS (
-
-    SELECT 
-        name,
-		alignment
-        intelligence AS intelligence_level,
-        ROW_NUMBER() OVER (PARTITION BY alignment ORDER BY intelligence DESC) AS rn
-    
-	FROM marvels
-    
-	WHERE intelligence >=5
-)
-
-SELECT 
-	g.name,
-	m.intelligence_level,
-	m.intelligence_desc,
-	m.strength_level,
-	m.strength_desc,
-	m.speed_level,
-	m.speed_desc
-
-FROM genius_iq_characters g
-
-LEFT JOIN marvel m
-	ON g.name = m.name
-	AND g.rn = 1;
-	
-/* END OF PRACTICE */
 	
 /* Narrow down the list further. Intelligence is important, but so is durability and strength. 
 You are great have to one or the other. 
@@ -284,6 +253,45 @@ WHERE popularity < 25
     AND name IN (
         SELECT name FROM genius_iq_characters
     );
+    
+    
+/* Better CTE*/
+
+/* The makings of a good movie require a great plot and some destruction and explosions.
+Anti-hero films have done well lately, so let's add to the plot by pinned one against a villain.
+ Therefore, intelligence of the characters is important, but so is durability and strength.
+The characters need to have a high level of popularity to ensure people buy tickets.
+Find the characters that meet the durability or strength standards*/
+
+WITH genius_iq_characters AS (
+
+    SELECT 
+        name,
+        alignment,
+        intelligence AS intelligence_level,
+        ROW_NUMBER() OVER (PARTITION BY alignment ORDER BY intelligence DESC) AS rn
+    
+    FROM marvels
+    
+    WHERE intelligence >= 5
+)
+
+SELECT 
+    g.name,
+    m.alignment,
+    m.intelligence_level,
+    m.strength_level,
+    m.strength_desc,
+    m.speed_level,
+    m.speed_desc
+
+FROM genius_iq_characters g
+
+LEFT JOIN marvels m
+    ON g.name = m.name
+
+WHERE m.popularity < 25
+    AND (m.durability >= 5 OR m.strength >= 5);
 	
  /*This query resulted in Iron Man , Doctor Doom, and Rogue. As mentioned eariler, the stats might be wrong for Rogue.
  However it is what we have and they are both in the top 25 of popularity. I know the MCU has it phases already planned out,
